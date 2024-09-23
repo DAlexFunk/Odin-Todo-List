@@ -1,12 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <meta charset="utf-8" />
-        <title>Webpack App</title>
+        <meta charset="utf-8"/>
+        <title>Todo List</title>
     </head>
     <body>
-        <h1>Hello world!</h1>
-        <h2>Tip: Check your console</h2>
+        <div class="section" id="projectsList">
+            <h1>Projects</h1>
+            <div id="addNew">
+                <input type="text" id="newProjectName">
+                <button id="add">+</button>
+            </div>
+            <div id="projects"></div>
+        </div>
+        <div class="section" id="addItem"></div>
+        <div class="section" id="currentItem"></div>
     </body>
     
 </html>
