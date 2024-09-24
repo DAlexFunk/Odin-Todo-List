@@ -1,17 +1,49 @@
 class Project {
-    #items = [];
-    
+    #todoItems = [];
+    domElement;
+
     constructor(name) {
         this.name = name;
+        this.createDomElement();
+    }
+    
+    createDomElement() {
+        const domElement = document.createElement("div");
+        domElement.className = "project";
+        domElement.textContent = this.name;
+        domElement.self = this;
+
+        this.domElement = domElement;
     }
 
     getItems() {
-        return this.#items;
+        return this.#todoItems;
     }
 
     addItem(newItem) {
-        this.#items.push(newItem);
+        this.#todoItems.push(newItem);
     }
 }
 
-export {Project};
+class TodoItem {
+    desc = "";
+    dueDate = "";
+    priority = "";
+    domElement;
+    
+    constructor(name) {
+        this.name = name;
+        this.createDomElement();
+    }
+
+    createDomElement() {
+        const itemElement = document.createElement("div");
+        itemElement.className = "todoItem";
+        itemElement.textContent = this.name;
+        itemElement.self = this;
+
+        this.domElement = itemElement;
+    }
+}
+
+export {Project, TodoItem};

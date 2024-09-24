@@ -9,12 +9,22 @@ const Formatter = {
         const projList = document.querySelector("div#projects");
         
         Formatter.clearTarget(projList);
-        for (const proj of list) {
-            const newProj = document.createElement("div");
-            newProj.className = "project";
-            newProj.textContent = proj.name;
-            projList.appendChild(newProj);
-        }
+        list.forEach((proj) => projList.appendChild(proj.domElement));
+    },
+
+    updateSelectedProject: function(activeProject) {
+        const todoItems = document.querySelector("div#todoItems");
+        const currentProjectText = document.querySelector("h1#currentProjectText")
+        currentProjectText.textContent = activeProject.self.name;
+        Formatter.displayTodoItems(activeProject);
+    },
+
+    displayTodoItems: function(project) {
+        const todoItemsList = document.querySelector("div#todoItems");
+        const todoItems = project.self.getItems();
+
+        Formatter.clearTarget(todoItemsList);
+        todoItems.forEach((item) => todoItemsList.appendChild(item.domElement));
     }
 }
 
