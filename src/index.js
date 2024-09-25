@@ -13,6 +13,8 @@ let activeTodoItem = document.querySelector("div.todoItem.active");
 const currentItemArea = document.querySelector("div#currentItem");
 
 function addNewProject() {
+    if (!projNameInput.value) return;
+
     const newProj = new Project(projNameInput.value);
     projNameInput.value = "";
     projList.push(newProj);
@@ -34,7 +36,7 @@ function selectProject(evt) {
 }
 
 function addTodoItem() {
-    if (activeProject) {
+    if (activeProject && todoNameInput.value) {
         const newTodo = new TodoItem(todoNameInput.value);
         todoNameInput.value = "";
         activeProject.self.addItem(newTodo);
@@ -46,8 +48,8 @@ function addTodoItem() {
 }
 
 function selectTodoItem(evt) {
-    todoItems.forEach((item) => item.className = "todoItem");
-    evt.currentTarget.className = "active todoItem";
+    todoItems.forEach((item) => item.className = item.className.replace("active", ""));
+    evt.currentTarget.className += " active";
     activeTodoItem = evt.currentTarget;
 
     Formatter.updateTodoItem(activeTodoItem.self);

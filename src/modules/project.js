@@ -30,6 +30,7 @@ class TodoItem {
     dueDate = "";
     priority = "";
     domElement;
+    complete = false;
     
     constructor(name) {
         this.name = name;

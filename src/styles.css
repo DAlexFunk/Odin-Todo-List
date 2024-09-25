@@ -33,3 +33,7 @@ div.todoItem.active {
     background-color: #CCC5B9;
     color: #252422;
 }
+
+div.todoItem.complete {
+    text-decoration: line-through 2px;
+}

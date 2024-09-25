@@ -24,7 +24,12 @@ const Formatter = {
         const todoItems = project.self.getItems();
 
         Formatter.clearTarget(todoItemsList);
-        todoItems.forEach((item) => todoItemsList.appendChild(item.domElement));
+        todoItems.forEach((item) => {
+            todoItemsList.appendChild(item.domElement);
+            if (item.complete) {
+                item.domElement.className += " complete";
+            }
+        });
     },
 
     updateTodoItem: function(todoItem) {
@@ -98,6 +103,21 @@ const Formatter = {
             todoItem.desc = descInput.value;
         })
         currentItemArea.appendChild(submitButton);
+
+        const finishButton = document.createElement("button");
+        finishButton.id = "finishButton";
+        finishButton.textContent = "Finish";
+        finishButton.addEventListener("click", () => {
+            if (todoItem.complete) {
+                todoItem.domElement.className = todoItem.domElement.className.replace(" complete", "");
+                todoItem.complete = false;
+            } else {
+                todoItem.domElement.className += " complete";
+                todoItem.complete = true;
+            }
+        })
+
+        currentItemArea.appendChild(finishButton);
     }
 }
 
