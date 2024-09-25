@@ -17,9 +17,9 @@ function addNewProject() {
 
     const newProj = new Project(projNameInput.value);
     projNameInput.value = "";
-    projList.push(newProj);
+    document.projList.push(newProj);
 
-    Formatter.displayProjList(projList);
+    Formatter.displayProjList(document.projList);
     projects = document.querySelectorAll("div.project");
     projects.forEach((proj) => proj.addEventListener("click", selectProject));
 }
@@ -55,7 +55,7 @@ function selectTodoItem(evt) {
     Formatter.updateTodoItem(activeTodoItem.self);
 }
 
-const projList = [];
+document.projList = [];
 
 projects.forEach((proj) => proj.addEventListener("click", (evt) => evt.currentTarget.className = "project active"));
 addButton.addEventListener("click", addNewProject);

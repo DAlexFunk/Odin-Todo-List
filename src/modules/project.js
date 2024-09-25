@@ -1,3 +1,5 @@
+import { Formatter } from "./formatter";
+
 class Project {
     #todoItems = [];
     domElement;
@@ -12,6 +14,19 @@ class Project {
         domElement.className = "project";
         domElement.textContent = this.name;
         domElement.self = this;
+
+        const removeButton = document.createElement("button");
+        removeButton.id = "projectRemove";
+        removeButton.textContent = "X";
+        removeButton.addEventListener("click", (evt) => {
+            this.domElement.remove();
+            document.projList.splice(document.projList.indexOf(this), 1);
+            Formatter.displayProjList(document.projList);
+            Formatter.clearTarget(document.querySelector("div#todoItems"));
+            document.querySelector("h1#currentProjectText").textContent = "No Project Selected";
+            evt.stopPropagation();
+        });
+        domElement.appendChild(removeButton);
 
         this.domElement = domElement;
     }
