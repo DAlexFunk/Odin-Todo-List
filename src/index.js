@@ -18,6 +18,7 @@ function addNewProject() {
     const newProj = new Project(projNameInput.value);
     projNameInput.value = "";
     document.projList.push(newProj);
+    console.log(newProj);
 
     Formatter.displayProjList(document.projList);
     projects = document.querySelectorAll("div.project");
@@ -28,7 +29,7 @@ function selectProject(evt) {
     todoItems.forEach((item) => item.className = "todoItem");
     projects.forEach((proj => proj.className = "project"));
     evt.currentTarget.className = "project active";
-    activeProject = evt.currentTarget;
+    activeProject = evt.currentTarget.getParentFromList(document.projList);
     
     Formatter.updateSelectedProject(activeProject);
     Formatter.clearTarget(currentItemArea);
@@ -37,9 +38,9 @@ function selectProject(evt) {
 
 function addTodoItem() {
     if (activeProject && todoNameInput.value) {
-        const newTodo = new TodoItem(todoNameInput.value, activeProject.self);
+        const newTodo = new TodoItem(todoNameInput.value, activeProject);
         todoNameInput.value = "";
-        activeProject.self.addItem(newTodo);
+        activeProject.addItem(newTodo);
 
         Formatter.displayTodoItems(activeProject);
         todoItems = document.querySelectorAll("div.todoItem");
@@ -52,7 +53,7 @@ function selectTodoItem(evt) {
     evt.currentTarget.className += " active";
     activeTodoItem = evt.currentTarget;
 
-    Formatter.updateTodoItem(activeTodoItem.self);
+    Formatter.updateTodoItem(activeTodoItem.getParentFromList(activeProject.getItems()));
 }
 
 document.projList = [];
@@ -60,3 +61,8 @@ document.projList = [];
 projects.forEach((proj) => proj.addEventListener("click", (evt) => evt.currentTarget.className = "project active"));
 addButton.addEventListener("click", addNewProject);
 addTodoButton.addEventListener("click", addTodoItem);
+window.addEventListener("load", console.log(localStorage.getItem("projects")));
+window.addEventListener("beforeunload", () => {
+    const jsonObject = JSON.stringify(document.projList);
+    localStorage.setItem("projects", jsonObject);
+});

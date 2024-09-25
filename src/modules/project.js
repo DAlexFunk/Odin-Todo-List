@@ -1,19 +1,25 @@
 import { Formatter } from "./formatter";
 
 class Project {
-    #todoItems = [];
+    todoItems = [];
     domElement;
 
     constructor(name) {
         this.name = name;
         this.createDomElement();
     }
-    
+
     createDomElement() {
         const domElement = document.createElement("div");
         domElement.className = "project";
         domElement.textContent = this.name;
-        domElement.self = this;
+        domElement.getParentFromList = function(list) {
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].domElement === this) {
+                    return list[i];
+                }
+            }
+        };
 
         const removeButton = document.createElement("button");
         removeButton.id = "projectRemove";
@@ -32,15 +38,15 @@ class Project {
     }
 
     getItems() {
-        return this.#todoItems;
+        return this.todoItems;
     }
 
     addItem(newItem) {
-        this.#todoItems.push(newItem);
+        this.todoItems.push(newItem);
     }
 
     removeItem(index) {
-        this.#todoItems.splice(index, 1);
+        this.todoItems.splice(index, 1);
     }
 }
 
@@ -58,10 +64,16 @@ class TodoItem {
     }
 
     createDomElement() {
-        const itemElement = document.createElement("div");
-        itemElement.className = "todoItem";
-        itemElement.textContent = this.name;
-        itemElement.self = this;
+        const domElement = document.createElement("div");
+        domElement.className = "todoItem";
+        domElement.textContent = this.name;
+        domElement.getParentFromList = function(list) {
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].domElement === this) {
+                    return list[i];
+                }
+            }
+        };
 
         const removeButton = document.createElement("button");
         removeButton.id = "projectRemove";
@@ -69,13 +81,13 @@ class TodoItem {
         removeButton.addEventListener("click", (evt) => {
             this.domElement.remove();
             this.project.removeItem(this.project.getItems().indexOf(this));
-            Formatter.displayTodoItems(this.project.domElement);
+            Formatter.displayTodoItems(this.project);
             Formatter.clearTarget(document.querySelector("div#currentItem"));
             evt.stopPropagation();
         });
-        itemElement.appendChild(removeButton);
+        domElement.appendChild(removeButton);
 
-        this.domElement = itemElement;
+        this.domElement = domElement;
     }
 }
 

@@ -15,13 +15,13 @@ const Formatter = {
     updateSelectedProject: function(activeProject) {
         const todoItems = document.querySelector("div#todoItems");
         const currentProjectText = document.querySelector("h1#currentProjectText")
-        currentProjectText.textContent = activeProject.self.name;
+        currentProjectText.textContent = activeProject.name;
         Formatter.displayTodoItems(activeProject);
     },
 
     displayTodoItems: function(project) {
         const todoItemsList = document.querySelector("div#todoItems");
-        const todoItems = project.self.getItems();
+        const todoItems = project.getItems();
 
         Formatter.clearTarget(todoItemsList);
         todoItems.forEach((item) => {
