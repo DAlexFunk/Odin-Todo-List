@@ -38,17 +38,22 @@ class Project {
     addItem(newItem) {
         this.#todoItems.push(newItem);
     }
+
+    removeItem(index) {
+        this.#todoItems.splice(index, 1);
+    }
 }
 
 class TodoItem {
     desc = "";
     dueDate = "";
     priority = "";
-    domElement;
+    domElement = null;
     complete = false;
     
-    constructor(name) {
+    constructor(name, project) {
         this.name = name;
+        this.project = project;
         this.createDomElement();
     }
 
@@ -57,6 +62,18 @@ class TodoItem {
         itemElement.className = "todoItem";
         itemElement.textContent = this.name;
         itemElement.self = this;
+
+        const removeButton = document.createElement("button");
+        removeButton.id = "projectRemove";
+        removeButton.textContent = "X";
+        removeButton.addEventListener("click", (evt) => {
+            this.domElement.remove();
+            this.project.removeItem(this.project.getItems().indexOf(this));
+            Formatter.displayTodoItems(this.project.domElement);
+            Formatter.clearTarget(document.querySelector("div#currentItem"));
+            evt.stopPropagation();
+        });
+        itemElement.appendChild(removeButton);
 
         this.domElement = itemElement;
     }

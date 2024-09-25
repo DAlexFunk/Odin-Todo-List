@@ -37,7 +37,7 @@ function selectProject(evt) {
 
 function addTodoItem() {
     if (activeProject && todoNameInput.value) {
-        const newTodo = new TodoItem(todoNameInput.value);
+        const newTodo = new TodoItem(todoNameInput.value, activeProject.self);
         todoNameInput.value = "";
         activeProject.self.addItem(newTodo);
 
