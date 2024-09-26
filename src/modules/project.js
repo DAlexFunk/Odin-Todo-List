@@ -1,11 +1,11 @@
 import { Formatter } from "./formatter";
 
 class Project {
-    todoItems = [];
     domElement;
 
-    constructor(name) {
+    constructor(name, todoItems) {
         this.name = name;
+        this.todoItems = todoItems;
         this.createDomElement();
     }
 
@@ -29,6 +29,7 @@ class Project {
             document.projList.splice(document.projList.indexOf(this), 1);
             Formatter.displayProjList(document.projList);
             Formatter.clearTarget(document.querySelector("div#todoItems"));
+            // Formatter.clearTarget()
             document.querySelector("h1#currentProjectText").textContent = "No Project Selected";
             evt.stopPropagation();
         });
@@ -57,10 +58,16 @@ class TodoItem {
     domElement = null;
     complete = false;
     
-    constructor(name, project) {
+    constructor(name) {
         this.name = name;
-        this.project = project;
         this.createDomElement();
+    }
+
+    loadFromStorage(desc, dueDate, priority, complete) {
+        this.desc = desc;
+        this.dueDate = dueDate;
+        this.priority = priority;
+        this.complete = complete;
     }
 
     createDomElement() {
@@ -80,14 +87,22 @@ class TodoItem {
         removeButton.textContent = "X";
         removeButton.addEventListener("click", (evt) => {
             this.domElement.remove();
-            this.project.removeItem(this.project.getItems().indexOf(this));
-            Formatter.displayTodoItems(this.project);
+            const project = this.getParentProjectFromList(document.projList);
+            project.removeItem(project.getItems().indexOf(this));
+            Formatter.displayTodoItems(project);
             Formatter.clearTarget(document.querySelector("div#currentItem"));
             evt.stopPropagation();
         });
         domElement.appendChild(removeButton);
 
         this.domElement = domElement;
+    }
+
+    getParentProjectFromList(list) {
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].todoItems.includes(this)) return list[i];
+        }
+        return false;
     }
 }
 

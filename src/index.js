@@ -15,17 +15,19 @@ const currentItemArea = document.querySelector("div#currentItem");
 function addNewProject() {
     if (!projNameInput.value) return;
 
-    const newProj = new Project(projNameInput.value);
+    const newProj = new Project(projNameInput.value, []);
     projNameInput.value = "";
     document.projList.push(newProj);
-    console.log(newProj);
-
+    
     Formatter.displayProjList(document.projList);
     projects = document.querySelectorAll("div.project");
     projects.forEach((proj) => proj.addEventListener("click", selectProject));
 }
 
 function selectProject(evt) {
+    let todoItems = document.querySelectorAll("div.todoItem");
+    let projects = document.querySelectorAll("div.project");
+
     todoItems.forEach((item) => item.className = "todoItem");
     projects.forEach((proj => proj.className = "project"));
     evt.currentTarget.className = "project active";
@@ -34,6 +36,7 @@ function selectProject(evt) {
     Formatter.updateSelectedProject(activeProject);
     Formatter.clearTarget(currentItemArea);
     todoItems = document.querySelectorAll("div.todoItem");
+    todoItems.forEach((item) => item.addEventListener("click", selectTodoItem));
 }
 
 function addTodoItem() {
@@ -49,6 +52,8 @@ function addTodoItem() {
 }
 
 function selectTodoItem(evt) {
+    let todoItems = document.querySelectorAll("div.todoItem");
+
     todoItems.forEach((item) => item.className = item.className.replace("active", ""));
     evt.currentTarget.className += " active";
     activeTodoItem = evt.currentTarget;
@@ -56,12 +61,28 @@ function selectTodoItem(evt) {
     Formatter.updateTodoItem(activeTodoItem.getParentFromList(activeProject.getItems()));
 }
 
-document.projList = [];
-
-projects.forEach((proj) => proj.addEventListener("click", (evt) => evt.currentTarget.className = "project active"));
 addButton.addEventListener("click", addNewProject);
 addTodoButton.addEventListener("click", addTodoItem);
-window.addEventListener("load", console.log(localStorage.getItem("projects")));
+
+window.addEventListener("load", () => {
+    document.projList = [];
+    const dataFromStorage = JSON.parse(localStorage.getItem("projects"))
+
+    for (const project of dataFromStorage) {
+        const todoList = [];
+        for (const todoItem of project.todoItems) {
+            const loadedTodoItem = new TodoItem(todoItem.name)
+            loadedTodoItem.loadFromStorage(todoItem.desc, todoItem.dueDate, todoItem.priority, todoItem.complete);
+            todoList.push(loadedTodoItem);
+        }
+
+        const loadedProject = new Project(project.name, todoList);
+        document.projList.push(loadedProject);
+    }
+
+    Formatter.displayProjList(document.projList);
+    document.querySelectorAll("div.project").forEach((proj) => proj.addEventListener("click", selectProject));
+});
 window.addEventListener("beforeunload", () => {
     const jsonObject = JSON.stringify(document.projList);
     localStorage.setItem("projects", jsonObject);

@@ -13,7 +13,7 @@ const Formatter = {
     },
 
     updateSelectedProject: function(activeProject) {
-        const todoItems = document.querySelector("div#todoItems");
+        const todoItems = document.querySelectorAll("div.todoItem");
         const currentProjectText = document.querySelector("h1#currentProjectText")
         currentProjectText.textContent = activeProject.name;
         Formatter.displayTodoItems(activeProject);
