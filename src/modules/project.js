@@ -73,7 +73,9 @@ class TodoItem {
     createDomElement() {
         const domElement = document.createElement("div");
         domElement.className = "todoItem";
-        domElement.textContent = this.name;
+        const text = document.createElement("span");
+        text.textContent = this.name;
+        domElement.appendChild(text);
         domElement.getParentFromList = function(list) {
             for (let i = 0; i < list.length; i++) {
                 if (list[i].domElement === this) {
@@ -83,7 +85,7 @@ class TodoItem {
         };
 
         const removeButton = document.createElement("button");
-        removeButton.id = "projectRemove";
+        removeButton.className = "todoRemove";
         removeButton.textContent = "X";
         removeButton.addEventListener("click", (evt) => {
             this.domElement.remove();
